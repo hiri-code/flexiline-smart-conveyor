@@ -123,11 +123,3 @@ class MessageColors:
 class ThreadConfig:
     """Threading and async operation configuration."""
     MESSAGE_CLEAR_DELAY: float = 3.0 # Seconds to wait before clearing status messages from the UI
-
-
-# Color detection results
-class DetectionMessages:
-    """Standard color detection result strings."""
-    BLUE_DETECTED: str = "Blue bottle detected"
-    RED_DETECTED: str = "Red bottle detected"
-    NONE_DETECTED: str = "No bottle detected"
