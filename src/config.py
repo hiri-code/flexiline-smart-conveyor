@@ -5,7 +5,6 @@ This file contains the configuration settings for FlexiLine, including parameter
 system constant and configuration values.
 """
 
-# Serial communication constants
 class SerialConfig:
     """Serial communication configuration for Arduino controller."""
     BAUD_RATE: int = 115200
@@ -14,7 +13,6 @@ class SerialConfig:
     PORT_SCAN_RANGE: tuple[int, int] = (1, 33) # Range of COM ports to scan for available devices
 
 
-# Serial protocol commands
 class SerialCommands:
     """Serial protocol commands for communication with Arduino communication."""
     # Python to Arduino
@@ -28,9 +26,7 @@ class SerialCommands:
     CONTROL_REQUEST: str = "CONTROL" # Signal from Arduino requesting color detection
 
 
-# Camera and image processing constants
 class CameraConfig:
-    """Camera and image processing configuration."""
     CAMERA_INDEX: int = 0 # Default camera index (0 for built-in webcam)
     FRAME_WIDTH: int = 640 
     FRAME_HEIGHT: int = 480
@@ -47,10 +43,7 @@ class CameraConfig:
     LOWER_RED_2: tuple[int, int, int] = (170, 120, 70)
     UPPER_RED_2: tuple[int, int, int] = (180, 255, 255)
 
-
-# UI Configuration
 class UIConfig:
-    """User interface configuration."""
     WINDOW_TITLE: str = "FlexiLine | Operator"
     CAMERA_LABEL_WIDTH: int = 620
     CAMERA_LABEL_HEIGHT: int = 460
@@ -62,7 +55,6 @@ class UIConfig:
     BUTTON_TOGGLE_DELAY_MS: int = 1000 # Delay in milliseconds to prevent rapid toggling of start/stop button
 
 
-# Production chart configuration
 class ChartConfig:
     """Production chart visualization configuration."""
     CHART_TITLE: str = "Processed bottles"
@@ -74,7 +66,6 @@ class ChartConfig:
     LEGEND_BLUE: str = "Blue bottles" # Legend label for blue bottle line
 
 
-# Status message
 class StatusMessages:
     """Status messages for UI display."""
     # Serial connection messages
@@ -110,16 +101,14 @@ class StatusMessages:
     CLOSE_CONFIRMATION_NO: str = "No"
 
 
-# Message colors
 class MessageColors:
     """Colors for status messages."""
     WHITE: str = "white" # Default color for status messages
     GREEN: str = "green" # Color for success messages (e.g., color detected)
-    RED: str = "red" # Color for error messages (e.g., camera or
+    RED: str = "red" # Color for error messages (e.g., camera error)
     YELLOW: str = "yellow" # Color for warning messages (e.g., no color detected)
 
 
-# Threading configuration
 class ThreadConfig:
     """Threading and async operation configuration."""
     MESSAGE_CLEAR_DELAY: float = 3.0 # Seconds to wait before clearing status messages from the UI
