@@ -100,7 +100,6 @@ class StatusMessages:
     CLOSE_CONFIRMATION_YES: str = "Yes"
     CLOSE_CONFIRMATION_NO: str = "No"
 
-
 class MessageColors:
     """Colors for status messages."""
     WHITE: str = "white" # Default color for status messages
@@ -108,6 +107,10 @@ class MessageColors:
     RED: str = "red" # Color for error messages (e.g., camera error)
     YELLOW: str = "yellow" # Color for warning messages (e.g., no color detected)
 
+class DetectionResult:
+    BLUE: str = "blue"
+    RED: str = "red"
+    NONE: str = "none"
 
 class ThreadConfig:
     """Threading and async operation configuration."""

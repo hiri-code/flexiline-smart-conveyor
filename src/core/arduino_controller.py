@@ -1,7 +1,7 @@
 """
-Arduino controller file.
+Arduino controller module.
 
-This file contains the serial communication with Arduino controller,
+This module contains the serial communication with Arduino controller,
 including connection management, data transmission and reception of
 control signals.
 """
