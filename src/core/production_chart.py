@@ -1,20 +1,20 @@
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QWidget
 from matplotlib.figure import Figure
 
 from src.config import ChartConfig, DetectionResult
 
 class ProductionChart(FigureCanvas):
     """
-    PyQt5 widget that displays a real time line chart of red and blue detections.
+    Displays a real time line chart of red and blue detections.
 
     Signals:
         counters_updated(int, int): Emitted when the red and blue counts are updated.
         chart_updated(): Emitted when the chart is updated with new data.
     """
-    counters_updated = pyqtSignal(int, int)
-    chart_updated = pyqtSignal()
+    counters_updated = Signal(int, int)
+    chart_updated = Signal()
 
     def __init__(
             self,

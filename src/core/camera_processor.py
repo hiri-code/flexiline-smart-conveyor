@@ -5,8 +5,8 @@ This module contains the camera processing logic, including initialization,
 handles the continous capture of video frames, conversion to hsv and emits signals.
 """
 
-from PyQt5.QtCore import QObject, pyqtSignal, QThread
-from PyQt5.QtGui import QImage
+from PySide6.QtCore import QObject, Signal, QThread
+from PySide6.QtGui import QImage
 import cv2
 from src.config import CameraConfig, DetectionResult
 import numpy as np
@@ -27,10 +27,10 @@ class CameraReaderThread(QThread):
             stops after emitting.
         started_successfully(): Emitted after the camera is initialized successfully.
     """
-    frame_ready = pyqtSignal(QImage)
-    error_occurred = pyqtSignal(str)
-    started_successfully = pyqtSignal()
-    detection_result = pyqtSignal(str)
+    frame_ready = Signal(QImage)
+    error_occurred = Signal(str)
+    started_successfully = Signal()
+    detection_result = Signal(str)
 
     def __init__(self, camera_index: int = CameraConfig.CAMERA_INDEX):
         """
@@ -164,11 +164,11 @@ class CameraProcessor(QObject):
         frame_ready(QImage): Forwarded from CameraReaderThread. Each frame is processed and 
             ready for display.
     """
-    camera_started = pyqtSignal()
-    camera_stopped = pyqtSignal()
-    camera_error = pyqtSignal(str)
-    detection_result = pyqtSignal(str)
-    frame_ready = pyqtSignal(QImage)
+    camera_started = Signal()
+    camera_stopped = Signal()
+    camera_error = Signal(str)
+    detection_result = Signal(str)
+    frame_ready = Signal(QImage)
     
     def __init__(self):
         super().__init__()

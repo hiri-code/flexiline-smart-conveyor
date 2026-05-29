@@ -7,7 +7,7 @@ control signals.
 """
 
 import serial
-from PyQt5.QtCore import QObject, pyqtSignal, QTimer, QThread
+from PySide6.QtCore import QObject, Signal, QTimer, QThread
 
 from src.config import SerialConfig, SerialCommands
 
@@ -25,9 +25,9 @@ class SerialReaderThread(QThread):
         control_requested(): Emitted when a control request is detected from the serial port.
         error_occurred(str): Emitted when an error occurs during serial reading.
     """
-    data_received = pyqtSignal(str)
-    control_requested = pyqtSignal()
-    error_occurred = pyqtSignal(str)
+    data_received = Signal(str)
+    control_requested = Signal()
+    error_occurred = Signal(str)
 
     def __init__(self, serial_port: serial.Serial):
         super().__init__()
@@ -75,13 +75,13 @@ class ArduinoController(QObject):
         control_requested(): Emitted when a control request is received from the Arduino.
         data_received(str): Emitted when a line of data is received from the serial port.
     """
-    connected = pyqtSignal(str)
-    disconnected = pyqtSignal(str)
-    connection_failed = pyqtSignal(str)
-    data_sent = pyqtSignal(bytes)
-    error_occurred = pyqtSignal(str)
-    control_requested = pyqtSignal()
-    data_received = pyqtSignal(str)
+    connected = Signal(str)
+    disconnected = Signal(str)
+    connection_failed = Signal(str)
+    data_sent = Signal(bytes)
+    error_occurred = Signal(str)
+    control_requested = Signal()
+    data_received = Signal(str)
 
     def __init__(self):
         super().__init__()
