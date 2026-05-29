@@ -64,6 +64,7 @@ class ChartConfig:
     BLUE_LINE_COLOR: str = "blue" # Color for blue bottle production line
     LEGEND_RED: str = "Red bottles" # Legend label for red bottle line
     LEGEND_BLUE: str = "Blue bottles" # Legend label for blue bottle line
+    MAX_HISTORY_POINTS: int = 50
 
 
 class StatusMessages:
