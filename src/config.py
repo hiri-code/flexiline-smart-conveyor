@@ -14,7 +14,7 @@ class SerialConfig:
 
 
 class SerialCommands:
-    """Serial protocol commands for communication with Arduino communication."""
+    """Serial protocol commands for communication with Arduino."""
     # Python to Arduino
     START: bytes = b"start" # Command to start the FlexiLine system
     STOP: bytes = b"stop" # Command to stop the FlexiLine system

@@ -145,7 +145,7 @@ class CameraReaderThread(QThread):
     def _to_qimage(self, frame: np.ndarray) -> QImage:
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         h, w, ch = rgb.shape
-        return QImage(rgb.data, w, h, ch * w, QImage.Format_RGB888).copy()
+        return QImage(rgb.data, w, h, ch * w, QImage.Format.Format_RGB888).copy()
 
 
 class CameraProcessor(QObject):
