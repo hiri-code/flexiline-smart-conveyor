@@ -233,6 +233,38 @@ QPushButton:disabled {
 
 
 /* =========================
+   MessageBox
+========================= */
+
+QMessageBox {
+    background-color: #111827;
+}
+
+QMessageBox QLabel {
+    color: #EAF2F8;
+    font-size: 14px;
+}
+
+QMessageBox QPushButton {
+    background-color: #0E1722;
+    border: 1px solid #36516A;
+    border-radius: 6px;
+    color: #EAF2F8;
+    padding: 6px 14px;
+    min-width: 80px;
+}
+
+QMessageBox QPushButton:hover {
+    background-color: #162536;
+    border: 1px solid #17C3B2;
+}
+
+QMessageBox QPushButton:pressed {
+    background-color: #0B111A;
+}
+
+
+/* =========================
    System message
 ========================= */
 

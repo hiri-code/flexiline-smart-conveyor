@@ -8,6 +8,7 @@ control signals.
 
 import serial
 from PySide6.QtCore import QObject, Signal, QTimer, QThread
+from serial.tools import list_ports
 
 from src.config import SerialConfig, SerialCommands
 
@@ -128,26 +129,10 @@ class ArduinoController(QObject):
         Returns:
             List of available COM port names (e.g., ["COM3", "COM4"]).
         """
-        available_ports = []
-        start_port, end_port = SerialConfig.PORT_SCAN_RANGE
+        available_ports = [port.device for port in list_ports.comports()]
 
-        for port_number in range(start_port, end_port):
-            port_name = f"COM{port_number}"
-            try:
-                test_serial = serial.Serial(
-                    port=port_name,
-                    baudrate=SerialConfig.BAUD_RATE,
-                    timeout=SerialConfig.TIMEOUT
-                )
-                test_serial.close()
-                available_ports.append(port_name)
-            except serial.SerialException:
-                continue
-
-        # Ensure currently selected port is in the list
         if self.selected_port and self.selected_port not in available_ports:
             available_ports.append(self.selected_port)
-            
         return available_ports
     
     def connect(self, port: str) -> None:

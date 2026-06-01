@@ -25,10 +25,10 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1330, 965)
+        MainWindow.resize(1362, 965)
         MainWindow.setStyleSheet(u"")
-        self.actionPorts = QAction(MainWindow)
-        self.actionPorts.setObjectName(u"actionPorts")
+        self.action_ports = QAction(MainWindow)
+        self.action_ports.setObjectName(u"action_ports")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -278,13 +278,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_6.addWidget(self.control_buttons_container)
 
-        self.system_message_label = QLabel(self.controls_card)
-        self.system_message_label.setObjectName(u"system_message_label")
-        self.system_message_label.setMinimumSize(QSize(0, 34))
-        self.system_message_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-
-        self.verticalLayout_6.addWidget(self.system_message_label)
-
 
         self.gridLayout_2.addWidget(self.controls_card, 0, 0, 1, 1)
 
@@ -402,7 +395,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1330, 33))
+        self.menubar.setGeometry(QRect(0, 0, 1362, 33))
         self.menu_options = QMenu(self.menubar)
         self.menu_options.setObjectName(u"menu_options")
         self.menu_help = QMenu(self.menubar)
@@ -414,7 +407,7 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menu_options.menuAction())
         self.menubar.addAction(self.menu_help.menuAction())
-        self.menu_options.addAction(self.actionPorts)
+        self.menu_options.addAction(self.action_ports)
 
         self.retranslateUi(MainWindow)
 
@@ -423,7 +416,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"FlexiLine", None))
-        self.actionPorts.setText(QCoreApplication.translate("MainWindow", u"Ports", None))
+        self.action_ports.setText(QCoreApplication.translate("MainWindow", u"Ports", None))
         self.logo_label.setText(QCoreApplication.translate("MainWindow", u"LOGO", None))
         self.app_title_label.setText(QCoreApplication.translate("MainWindow", u"FLEXILINE", None))
         self.app_subtitle_label.setText(QCoreApplication.translate("MainWindow", u"SMART CONVEYOR SYSTEM", None))
@@ -438,7 +431,6 @@ class Ui_MainWindow(object):
         self.start_button.setText(QCoreApplication.translate("MainWindow", u"Start", None))
         self.stop_button.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
         self.reset_chart_button.setText(QCoreApplication.translate("MainWindow", u"Reset chart", None))
-        self.system_message_label.setText(QCoreApplication.translate("MainWindow", u"System ready to start", None))
         self.counters_title_label.setText(QCoreApplication.translate("MainWindow", u"Counters", None))
         self.red_counter_title_label.setText(QCoreApplication.translate("MainWindow", u"Red count", None))
         self.red_counter_value_label.setText(QCoreApplication.translate("MainWindow", u"0", None))

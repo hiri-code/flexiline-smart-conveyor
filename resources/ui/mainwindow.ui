@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1330</width>
+    <width>1362</width>
     <height>965</height>
    </rect>
   </property>
@@ -526,22 +526,6 @@
             </layout>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="system_message_label">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>34</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>System ready to start</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
@@ -740,7 +724,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1330</width>
+     <width>1362</width>
      <height>33</height>
     </rect>
    </property>
@@ -748,7 +732,7 @@
     <property name="title">
      <string>Options</string>
     </property>
-    <addaction name="actionPorts"/>
+    <addaction name="action_ports"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">
@@ -759,7 +743,7 @@
    <addaction name="menu_help"/>
   </widget>
   <widget class="QStatusBar" name="status_bar"/>
-  <action name="actionPorts">
+  <action name="action_ports">
    <property name="text">
     <string>Ports</string>
    </property>

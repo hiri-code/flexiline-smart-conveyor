@@ -167,8 +167,8 @@ class CameraProcessor(QObject):
     camera_started = Signal()
     camera_stopped = Signal()
     camera_error = Signal(str)
-    detection_result = Signal(str)
     frame_ready = Signal(QImage)
+    detection_result = Signal(str)
     
     def __init__(self):
         super().__init__()
