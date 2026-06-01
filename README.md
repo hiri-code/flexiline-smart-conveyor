@@ -90,7 +90,7 @@ The architecture integrates:
 
 ## Serial Protocol
 
-The Python application and Arduino firmware communicate through a simple serial protocol.
+The Python application and Arduino firmware communicate through a simple newline-terminated serial protocol.
 
 ### Python to Arduino
 
@@ -127,12 +127,12 @@ The Python application and Arduino firmware communicate through a simple serial 
 ### Hardware
 
 * Arduino Mega
-* VGA OV7670 camera
+* USB camera / webcam
 * TCS3200 color sensor
 * LM393 proximity sensors
 * Liquid level sensors
 * Gear motors
-* PTS7960 H-Bridge motor drivers
+* BTS7960 H-Bridge motor drivers
 * Servomotors
 * Solenoid valves / liquid dispensing system
 * Conveyor belts
@@ -144,7 +144,7 @@ The original physical prototype was built using the following main components:
 
 | Component                           | Quantity | Purpose                                |
 | ----------------------------------- | -------: | -------------------------------------- |
-| VGA OV7670 camera                   |        1 | Image capture for final inspection     |
+| USB camera / webcam                 |        1 | Image capture for final inspection     |
 | TCS3200 color sensor                |        1 | Initial bottle color detection         |
 | LM393 proximity sensors             |       10 | Bottle presence and position detection |
 | Level sensors                       |        4 | Liquid level monitoring                |
@@ -152,7 +152,7 @@ The original physical prototype was built using the following main components:
 | 1/2" solenoid valves                |        2 | Liquid flow control                    |
 | Arduino Mega                        |        1 | Embedded control unit                  |
 | Servomotors                         |        2 | Mechanical routing and gate control    |
-| PTS7960 H-Bridge drivers            |        2 | Motor direction and power control      |
+| BTS7960 H-Bridge drivers            |        2 | Motor direction and power control      |
 | Steel square tube support structure |        2 | Mechanical frame                       |
 | Tinned cable                        |        2 | Electrical wiring                      |
 | Stainless steel sheet, gauge 18     |        2 | Structural and mechanical components   |
@@ -177,7 +177,7 @@ git clone https://github.com/hiri-code/flexiline-smart-conveyor.git
 cd flexiline-smart-conveyor
 ```
 
-### Create a virtual enviroment
+### Create a virtual environment
 
 ```bash
 python -m venv .venv
