@@ -2,7 +2,7 @@
 
 enum class SystemState {
     WAITING_START,
-    START_CONVEYOT,
+    START_CONVEYOR,
     BOTTLE_DETECTION,
     EVALUATE_COLOR,
     OUTPUT_CONTROL,
@@ -14,10 +14,12 @@ enum class SystemState {
     QUALITY_REJECTED
 };
 
-enum class DetectorColor {
+enum class DetectedColor {
     NONE,
     RED,
-    BLUE
+    BLUE,
+    GREEN,
+    YELLOW
 };
 
 enum class SerialCommand {
