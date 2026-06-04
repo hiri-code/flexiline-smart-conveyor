@@ -72,15 +72,25 @@ class Ui_MainWindow(object):
         self.title_text_widget.setMinimumSize(QSize(260, 40))
         self.verticalLayout_2 = QVBoxLayout(self.title_text_widget)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.app_title_label = QLabel(self.title_text_widget)
-        self.app_title_label.setObjectName(u"app_title_label")
-        sizePolicy.setHeightForWidth(self.app_title_label.sizePolicy().hasHeightForWidth())
-        self.app_title_label.setSizePolicy(sizePolicy)
-        self.app_title_label.setMinimumSize(QSize(0, 0))
-        self.app_title_label.setFrameShape(QFrame.Shape.NoFrame)
-        self.app_title_label.setAlignment(Qt.AlignmentFlag.AlignBottom|Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft)
+        self.verticalLayout_2.setContentsMargins(9, 1, -1, -1)
+        self.main_title_container = QWidget(self.title_text_widget)
+        self.main_title_container.setObjectName(u"main_title_container")
+        self.horizontalLayout_8 = QHBoxLayout(self.main_title_container)
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.flexi_label = QLabel(self.main_title_container)
+        self.flexi_label.setObjectName(u"flexi_label")
+        self.flexi_label.setMaximumSize(QSize(100, 16777215))
 
-        self.verticalLayout_2.addWidget(self.app_title_label)
+        self.horizontalLayout_8.addWidget(self.flexi_label)
+
+        self.line_label = QLabel(self.main_title_container)
+        self.line_label.setObjectName(u"line_label")
+        self.line_label.setMaximumSize(QSize(16777215, 16777215))
+
+        self.horizontalLayout_8.addWidget(self.line_label)
+
+
+        self.verticalLayout_2.addWidget(self.main_title_container)
 
         self.app_subtitle_label = QLabel(self.title_text_widget)
         self.app_subtitle_label.setObjectName(u"app_subtitle_label")
@@ -368,15 +378,9 @@ class Ui_MainWindow(object):
         self.system_health_container.setMinimumSize(QSize(0, 100))
         self.horizontalLayout_7 = QHBoxLayout(self.system_health_container)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.system_health_icon_label = QLabel(self.system_health_container)
-        self.system_health_icon_label.setObjectName(u"system_health_icon_label")
-        self.system_health_icon_label.setMinimumSize(QSize(120, 0))
-        self.system_health_icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.horizontalLayout_7.addWidget(self.system_health_icon_label)
-
         self.system_health_text_label = QLabel(self.system_health_container)
         self.system_health_text_label.setObjectName(u"system_health_text_label")
+        self.system_health_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontalLayout_7.addWidget(self.system_health_text_label)
 
@@ -395,7 +399,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1362, 33))
+        self.menubar.setGeometry(QRect(0, 0, 1362, 24))
         self.menu_options = QMenu(self.menubar)
         self.menu_options.setObjectName(u"menu_options")
         self.menu_help = QMenu(self.menubar)
@@ -417,8 +421,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"FlexiLine", None))
         self.action_ports.setText(QCoreApplication.translate("MainWindow", u"Ports", None))
-        self.logo_label.setText(QCoreApplication.translate("MainWindow", u"LOGO", None))
-        self.app_title_label.setText(QCoreApplication.translate("MainWindow", u"FLEXILINE", None))
+        self.logo_label.setText("")
+        self.flexi_label.setText(QCoreApplication.translate("MainWindow", u"FLEXI", None))
+        self.line_label.setText(QCoreApplication.translate("MainWindow", u"LINE", None))
         self.app_subtitle_label.setText(QCoreApplication.translate("MainWindow", u"SMART CONVEYOR SYSTEM", None))
         self.connection_status_label.setText(QCoreApplication.translate("MainWindow", u"Disconnected", None))
         self.connection_port_label.setText(QCoreApplication.translate("MainWindow", u"Port: --", None))
@@ -437,7 +442,6 @@ class Ui_MainWindow(object):
         self.blue_counter_title_label.setText(QCoreApplication.translate("MainWindow", u"Blue count", None))
         self.blue_counter_value_label.setText(QCoreApplication.translate("MainWindow", u"0", None))
         self.system_status_title_label.setText(QCoreApplication.translate("MainWindow", u"System Status", None))
-        self.system_health_icon_label.setText(QCoreApplication.translate("MainWindow", u"ICON", None))
         self.system_health_text_label.setText(QCoreApplication.translate("MainWindow", u"System operating normally", None))
         self.menu_options.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
         self.menu_help.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))

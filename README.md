@@ -229,7 +229,7 @@ python -m src.main
 * [x] Add external QSS styling.
 * [x] Integrate dashboard with core components.
 * [x] Add modular Arduino firmware.
-* [x] Add dashboard screenshots.
+* [ ] Add dashboard screenshots.
 * [ ] Complete final project documentation.
 
 ## Background

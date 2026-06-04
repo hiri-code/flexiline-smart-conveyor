@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
         self._setup_ports_menu()
         self._setup_datetime_timer()
         self._setup_message_timer()
+        self._setup_logo()
     
     def _setup_status_bar(self) -> None:
         """Add label to the status bar."""
@@ -101,11 +102,11 @@ class MainWindow(QMainWindow):
     
     def _setup_logo(self) -> None:
         logo_path = PATH_ROOT / "resources" / "images" / "flexiline_logo_mark.png"
-    
+
         if not logo_path.exists():
             print(f"Logo not found: {logo_path}")
             return
-    
+
         pixmap = QPixmap(str(logo_path))
         self.ui.logo_label.setPixmap(
             pixmap.scaled(

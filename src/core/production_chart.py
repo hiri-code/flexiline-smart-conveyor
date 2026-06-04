@@ -53,10 +53,21 @@ class ProductionChart(FigureCanvas):
         self._red_history: list[int] = []
         self._blue_history: list[int] = []
 
-        self._blue_line, = self._ax.plot([], [], label=legend_blue)
-        self._red_line, = self._ax.plot([], [], label=legend_red)
-        self._ax.legend()
+        self._blue_line, = self._ax.plot(
+            [],
+            [],
+            label=legend_blue,
+            color=ChartConfig.BLUE_LINE_COLOR
+        )
 
+        self._red_line, = self._ax.plot(
+            [],
+            [],
+            label=legend_red,
+            color=ChartConfig.RED_LINE_COLOR
+        )
+
+        self._setup_chart()
         self._update_plot()
 
     
@@ -115,10 +126,36 @@ class ProductionChart(FigureCanvas):
         self._blue_line.set_data(self._time_data, self._blue_history)
         self._red_line.set_data(self._time_data, self._red_history)
 
-        self._ax.relim()
-        self._ax.autoscale_view()
+        if not self._time_data:
+            self._ax.set_xlim(0, 10)
+            self._ax.set_ylim(0, 10)
+        else:
+            self._ax.relim()
+            self._ax.autoscale_view()
+            self._ax.margins(x=0.05, y=0.15)
 
         self.draw_idle()
+
+    def _setup_chart(self) -> None:
+        self._fig.patch.set_facecolor("#0B111A")
+        self._ax.set_facecolor("#0B111A")
+
+        self._ax.tick_params(colors="#C8D3DD")
+        self._ax.xaxis.label.set_color("#C8D3DD")
+        self._ax.yaxis.label.set_color("#C8D3DD")
+        self._ax.title.set_color("#EAF2F8")
+
+        for spine in self._ax.spines.values():
+            spine.set_color("#24384A")
+
+        self._ax.grid(True, color="#24384A", alpha=0.4)
+
+        legend = self._ax.legend()
+        legend.get_frame().set_facecolor("#0B111A")
+        legend.get_frame().set_edgecolor("#24384A")
+
+        for text in legend.get_texts():
+            text.set_color("#C8D3DD")
 
     def _trim_history(self) -> None:
         """Keep only the most recent chart data points."""

@@ -67,11 +67,19 @@ QFrame#connection_status_frame {
     border-radius: 8px;
 }
 
-QLabel#app_title_label {
+QLabel#flexi_label {
+    color: #EAF2F8;
     font-size: 32px;
     font-weight: 800;
     letter-spacing: 1px;
 }
+
+QLabel#line_label {
+    color: #17C3B2;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}  
 
 QLabel#app_subtitle_label,
 QLabel#connection_port_label {
@@ -177,6 +185,12 @@ QPushButton#start_button:pressed {
     background-color: #15803D;
 }
 
+QPushButton#start_button:disabled {
+    background-color: #1F4D35;
+    color: #9CA3AF;
+    border: 1px solid #1B3D2B;
+}
+
 QPushButton#stop_button {
     background-color: #DC3D3D;
     border: none;
@@ -193,6 +207,12 @@ QPushButton#stop_button:hover {
 
 QPushButton#stop_button:pressed {
     background-color: #991B1B;
+}
+
+QPushButton#stop_button:disabled {
+    background-color: #5F2A2A;
+    color: #9CA3AF;
+    border: 1px solid #3F1F1F;
 }
 
 QPushButton#retry_camera_button,
@@ -319,8 +339,8 @@ QLabel#system_health_icon_label {
 
 QLabel#system_health_text_label {
     color: #86EFAC;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 QStatusBar {

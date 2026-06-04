@@ -87,7 +87,7 @@ class StatusMessages:
 
     # System status messages
     SYSTEM_READY: str = "System ready"
-    SYSTEM_VERSION: str = "FlexiLine v1.2.3"
+    SYSTEM_VERSION: str = "FlexiLine v1.4.3"
     SYSTEM_STARTED: str = "System started"
     SYSTEM_STOPPED: str = "System stopped"
     SYSTEM_NO_ARDUINO: str = "No Arduino connected"
