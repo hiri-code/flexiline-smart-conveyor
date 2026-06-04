@@ -5,7 +5,7 @@ This module contains the main application window, responsible for initializing U
 components, connecting signals and coordinating others modules.
 """
 from PySide6.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QMenu, QMessageBox
-from PySide6.QtGui import QAction, QPixmap, QCloseEvent
+from PySide6.QtGui import QAction, QPixmap, QCloseEvent, QIcon
 from PySide6.QtCore import QTimer, Qt
 from datetime import datetime
 
@@ -98,10 +98,27 @@ class MainWindow(QMainWindow):
         self._message_clear_timer = QTimer(self)
         self._message_clear_timer.setSingleShot(True)
         self._message_clear_timer.timeout.connect(self._clear_temporary_message)
+    
+    def _setup_logo(self) -> None:
+        logo_path = PATH_ROOT / "resources" / "images" / "flexiline_logo_mark.png"
+    
+        if not logo_path.exists():
+            print(f"Logo not found: {logo_path}")
+            return
+    
+        pixmap = QPixmap(str(logo_path))
+        self.ui.logo_label.setPixmap(
+            pixmap.scaled(
+                self.ui.logo_label.size(),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+        )
 
     def _initialize_ui_state(self) -> None:
         """Set the initial state of all UI elements."""
-        self.ui.connection_status_label.setText(StatusMessages.SERIAL_DISCONNECTED)
+        self._set_connection_state(StatusMessages.SERIAL_DISCONNECTED, "offline")
+        self._set_system_health(StatusMessages.SYSTEM_READY, "ok")
         self.ui.connection_port_label.setText("Port: --")
         self.ui.camera_status_label.setText(StatusMessages.CAMERA_OFF)
         self.ui.red_counter_value_label.setText("0")
@@ -147,23 +164,25 @@ class MainWindow(QMainWindow):
     
     def _on_arduino_connected(self, port: str) -> None:
         """Update connection UI when Arduino connects successfully."""
-        self.ui.connection_status_label.setText(StatusMessages.SERIAL_CONNECTED)
+        self._set_connection_state(StatusMessages.SERIAL_CONNECTED, "ok")
         self.ui.connection_port_label.setText(f"Port: {port}")
+        self._set_system_health(StatusMessages.SYSTEM_READY, "ok")
         self._show_status_message(StatusMessages.SERIAL_CONNECTED)
 
 
     def _on_arduino_disconnected(self, port: str) -> None:
         """Reset connection UI whe Arduino disconnects."""
-        self.ui.connection_status_label.setText(StatusMessages.SERIAL_DISCONNECTED)
+        self._set_connection_state(StatusMessages.SERIAL_DISCONNECTED, "offline")
         self.ui.connection_port_label.setText("Port: --")
         self.camera.stop()
         self.ui.start_button.setEnabled(True)
         self.ui.stop_button.setEnabled(False)
+        self._set_system_health(StatusMessages.SERIAL_DISCONNECTED, "offline")
         self._show_status_message(StatusMessages.SERIAL_DISCONNECTED, temporary=False)
 
     def _on_arduino_connection_failed(self, error: str) -> None:
         """Show connection failure in UI."""
-        self.ui.connection_status_label.setText(StatusMessages.SERIAL_FAILED)
+        self._set_connection_state(StatusMessages.SERIAL_FAILED, "error")
         self._show_status_message(error)
 
     def _on_arduino_error_occurred(self, error: str) -> None:
@@ -188,6 +207,7 @@ class MainWindow(QMainWindow):
         message = StatusMessages.CAMERA_ERROR_RETRY.format(error)
         self.ui.camera_status_label.setText(message)
         self.ui.retry_camera_button.setVisible(True)
+        self._set_system_health(message, "error")
         self._show_status_message(message, temporary=False)
 
     def _on_camera_frame_ready(self, image) -> None:
@@ -234,6 +254,7 @@ class MainWindow(QMainWindow):
     def _on_start_clicked(self) -> None:
         """Send start command to Arduino and update button states."""
         if not self.arduino.is_connected:
+            self._set_system_health(StatusMessages.SYSTEM_NO_ARDUINO, "error")
             self._show_status_message(StatusMessages.SYSTEM_NO_ARDUINO)
             return
         
@@ -252,6 +273,7 @@ class MainWindow(QMainWindow):
         self.camera.stop()
         self.ui.stop_button.setEnabled(False)
         QTimer.singleShot(UIConfig.BUTTON_TOGGLE_DELAY_MS, lambda: self.ui.start_button.setEnabled(True))
+        self._set_system_health(StatusMessages.SYSTEM_STOPPED, "warning")
         self._show_status_message(StatusMessages.SYSTEM_STOPPED)
 
     def _on_reset_chart_clicked(self) -> None:
@@ -296,14 +318,26 @@ class MainWindow(QMainWindow):
 
         if temporary:
             self._message_clear_timer.start(UIConfig.MESSAGE_DURATION_MS)
-        
-    def _show_health_message(self, message: str) -> None:
-        self.ui.system_health_text_label.setText(message)
 
     def _clear_temporary_message(self) -> None:
         """Restore the default system message after a temporary message expires."""
         default_message = (StatusMessages.SYSTEM_READY if self.arduino.is_connected else StatusMessages.SERIAL_DISCONNECTED)
         self.status_message_label.setText(default_message)
+        
+    def _set_connection_state(self, text: str, state: str) -> None:
+        self.ui.connection_status_label.setText(text)
+        self._apply_state_property(self.ui.connection_status_label, state)
+
+
+    def _set_system_health(self, text: str, state: str) -> None:
+        self.ui.system_health_text_label.setText(text)
+        self._apply_state_property(self.ui.system_health_text_label, state)
+
+
+    def _apply_state_property(self, widget, state: str) -> None:
+        widget.setProperty("state", state)
+        widget.style().unpolish(widget)
+        widget.style().polish(widget)
     
     def _update_datetime(self) -> None:
         """Update the status bar clock with current local time."""

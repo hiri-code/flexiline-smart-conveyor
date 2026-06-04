@@ -308,7 +308,7 @@ QLabel#blue_counter_value_label {
 
 
 /* =========================
-   System health
+   System health & StatusBar
 ========================= */
 
 QLabel#system_health_icon_label {
@@ -323,11 +323,6 @@ QLabel#system_health_text_label {
     font-weight: 600;
 }
 
-
-/* =========================
-   StatusBar
-========================= */
-
 QStatusBar {
     background-color: #0E1722;
     color: #C8D3DD;
@@ -341,4 +336,21 @@ QStatusBar::item {
 
 QStatusBar QLabel {
     color: #C8D3DD;
+}
+
+QLabel#connection_status_label[state="ok"],
+QLabel#system_health_text_label[state="ok"] {
+    color: #55D94D;
+}
+
+QLabel#connection_status_label[state="warning"],
+QLabel#system_health_text_label[state="warning"] {
+    color: #FACC15;
+}
+
+QLabel#connection_status_label[state="error"],
+QLabel#system_health_text_label[state="error"],
+QLabel#connection_status_label[state="offline"],
+QLabel#system_health_text_label[state="offline"] {
+    color: #EF4444;
 }

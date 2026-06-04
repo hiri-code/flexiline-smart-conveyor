@@ -228,9 +228,8 @@ python -m src.main
 * [x] Create PySide6 dashboard interface.
 * [x] Add external QSS styling.
 * [x] Integrate dashboard with core components.
-* [ ] Add modular Arduino firmware.
-* [ ] Add system architecture documentation.
-* [ ] Add dashboard screenshots.
+* [x] Add modular Arduino firmware.
+* [x] Add dashboard screenshots.
 * [ ] Complete final project documentation.
 
 ## Background
