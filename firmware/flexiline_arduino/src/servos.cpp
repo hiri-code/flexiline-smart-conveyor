@@ -7,13 +7,15 @@
 namespace {
     Servo mainGateServo;
     Servo fillingGateServo;
-    Servo rejectGateServo;
+    Servo primaryRejectGateServo;
+    Servo finalRejectGateServo;
 }
 
 void setupServos() {
     mainGateServo.attach(Config::MAIN_GATE_SERVO_PIN);
     fillingGateServo.attach(Config::FILLING_GATE_SERVO_PIN);
-    rejectGateServo.attach(Config::REJECT_GATE_SERVO_PIN);
+    primaryRejectGateServo.attach(Config::PRIMARY_REJECT_GATE_SERVO_PIN);
+    finalRejectGateServo.attach(Config::FINAL_REJECT_GATE_SERVO_PIN);
 
     resetServoPositions();
 }
@@ -21,7 +23,8 @@ void setupServos() {
 void resetServoPositions() {
     closeMainGate();
     closeFillingGate();
-    closeRejectGate();
+    closePrimaryRejectGate();
+    closeFinalRejectGate();
 }
 
 void openMainGate() {
@@ -40,10 +43,18 @@ void closeFillingGate() {
     fillingGateServo.write(Config::FILLING_GATE_CLOSED_ANGLE);
 }
 
-void openRejectGate() {
-    rejectGateServo.write(Config::REJECT_GATE_OPEN_ANGLE);
+void openPrimaryRejectGate() {
+    primaryRejectGateServo.write(Config::PRIMARY_REJECT_GATE_OPEN_ANGLE);
 }
 
-void closeRejectGate() {
-    rejectGateServo.write(Config::REJECT_GATE_CLOSED_ANGLE);
+void closePrimaryRejectGate() {
+    primaryRejectGateServo.write(Config::PRIMARY_REJECT_GATE_CLOSED_ANGLE);
+}
+
+void openFinalRejectGate() {
+    finalRejectGateServo.write(Config::FINAL_REJECT_GATE_OPEN_ANGLE);
+}
+
+void closeFinalRejectGate() {
+    finalRejectGateServo.write(Config::FINAL_REJECT_GATE_CLOSED_ANGLE);
 }

@@ -11,7 +11,8 @@ enum class SystemState {
     FILL_RED,
     QUALITY_CONTROL,
     QUALITY_ACCEPTED,
-    QUALITY_REJECTED
+    INITIAL_REJECT,
+    FINAL_REJECT
 };
 
 enum class DetectedColor {

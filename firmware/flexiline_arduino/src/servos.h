@@ -12,5 +12,8 @@ void closeMainGate();
 void openFillingGate();
 void closeFillingGate();
 
-void openRejectGate();
-void closeRejectGate();
+void openPrimaryRejectGate();
+void closePrimaryRejectGate();
+
+void openFinalRejectGate();
+void closeFinalRejectGate();

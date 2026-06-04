@@ -18,6 +18,9 @@ DetectedColor cameraColor = DetectedColor::NONE;
 unsigned long lastDetectionTime = 0;
 unsigned long stateStartTime = 0;
 
+bool fillingStarted = false;
+bool controlRequestSent = false;
+
 
 // >>>>>>>>>>>>>>>>>>>> Function declarations <<<<<<<<<<<<<<<<<<<<
 
@@ -81,6 +84,8 @@ void resetSystem() {
     cameraColor = DetectedColor::NONE;
 
     lastDetectionTime = 0;
+    fillingStarted = false;
+    controlRequestSent = false;
 
     changeState(SystemState::WAITING_START);
 }
@@ -111,7 +116,8 @@ void runStateMachine(SerialCommand command) {
             Serial.println("Starting main conveyor");
             closeMainGate();
             closeFillingGate();
-            closeRejectGate();
+            closePrimaryRejectGate();
+            closeFinalRejectGate();
             stopSorterConveyor();
             startMainConveyor(Config::MAIN_CONVEYOR_SPEED);
             changeState(SystemState::BOTTLE_DETECTION);
@@ -152,14 +158,16 @@ void runStateMachine(SerialCommand command) {
         case SystemState::OUTPUT_CONTROL:
             if (physicalColor == DetectedColor::RED || physicalColor == DetectedColor::BLUE) {
                 Serial.println("Valid color. Moving to filling stage");
+            
                 openFillingGate();
                 startMainConveyor(Config::MAIN_CONVEYOR_SPEED);
                 changeState(SystemState::FILLING_ROUTING);
             } else {
-                Serial.println("Invalid color. Sending to reject path");
-                openRejectGate();
+                Serial.println("Invalid physical color. Sending to primary reject path");
+            
+                openPrimaryRejectGate();
                 startMainConveyor(Config::MAIN_CONVEYOR_SPEED);
-                changeState(SystemState::QUALITY_REJECTED);
+                changeState(SystemState::INITIAL_REJECT);
             }
             break;
 
@@ -169,28 +177,164 @@ void runStateMachine(SerialCommand command) {
             } else if (physicalColor == DetectedColor::RED) {
                 changeState(SystemState::FILL_RED);
             } else {
-                changeState(SystemState::QUALITY_REJECTED);
+                changeState(SystemState::INITIAL_REJECT);
             }
             break;
 
         case SystemState::FILL_BLUE:
-    
+            if (!fillingStarted && isSensorActive(Config::BLUE_FILL_SENSOR_PIN)) {
+                Serial.println("Blue filling station reached");
+            
+                stopMainConveyor();
+                closeFillingGate();
+                startBluePump();
+            
+                fillingStarted = true;
+                stateStartTime = millis();
+            }
+        
+            if (
+                fillingStarted &&
+                hasElapsed(stateStartTime, Config::BLUE_FILLING_TIME_MS)
+            ) {
+                Serial.println("Blue filling complete");
+            
+                stopBluePump();
+                startMainConveyor(Config::MAIN_CONVEYOR_SPEED);
+            
+                fillingStarted = false;
+                changeState(SystemState::QUALITY_CONTROL);
+            }
             break;
 
         case SystemState::FILL_RED:
+            if (!fillingStarted && isSensorActive(Config::RED_FILL_SENSOR_PIN)) {
+                Serial.println("Red filling station reached");
             
+                stopMainConveyor();
+                closeFillingGate();
+                startRedPump();
+            
+                fillingStarted = true;
+                stateStartTime = millis();
+            }
+        
+            if (
+                fillingStarted &&
+                hasElapsed(stateStartTime, Config::RED_FILLING_TIME_MS)
+            ) {
+                Serial.println("Red filling complete");
+            
+                stopRedPump();
+                startMainConveyor(Config::MAIN_CONVEYOR_SPEED);
+            
+                fillingStarted = false;
+                changeState(SystemState::QUALITY_CONTROL);
+            }
             break;
 
         case SystemState::QUALITY_CONTROL:
+            if (!controlRequestSent && isSensorActive(Config::CAMERA_STATION_SENSOR_PIN)) {
+                Serial.println("Bottle detected at camera station");
             
+                stopMainConveyor();
+                sendControlRequest();
+            
+                controlRequestSent = true;
+                stateStartTime = millis();
+            }
+        
+            if (controlRequestSent) {
+                if (command == SerialCommand::CAMERA_BLUE) {
+                    Serial.println("Camera result received: BLUE");
+                    cameraColor = DetectedColor::BLUE;
+                    startMainConveyor(Config::MAIN_CONVEYOR_SPEED);
+                    changeState(SystemState::QUALITY_ACCEPTED);
+                } else if (command == SerialCommand::CAMERA_RED) {
+                    Serial.println("Camera result received: RED");
+                    cameraColor = DetectedColor::RED;
+                    startMainConveyor(Config::MAIN_CONVEYOR_SPEED);
+                    changeState(SystemState::QUALITY_ACCEPTED);
+                } else if (command == SerialCommand::CAMERA_NONE) {
+                    Serial.println("Camera result received: NONE");
+                    cameraColor = DetectedColor::NONE;
+                    startMainConveyor(Config::MAIN_CONVEYOR_SPEED);
+                    changeState(SystemState::FINAL_REJECT);
+                }
+            
+                if (
+                    currentState == SystemState::QUALITY_CONTROL &&
+                    hasElapsed(stateStartTime, Config::CAMERA_RESPONSE_TIMEOUT_MS)
+                ) {
+                    Serial.println("Camera response timeout. Retrying CONTROL request.");
+                    controlRequestSent = false;
+                }
+            }
             break;
 
         case SystemState::QUALITY_ACCEPTED:
+            if (cameraColor == DetectedColor::BLUE) {
+                startSorterConveyor(
+                    Config::SORTER_CONVEYOR_SPEED,
+                    MotorDirection::FORWARD
+                );
             
+                if (isSensorActive(Config::BLUE_OUTPUT_SENSOR_PIN)) {
+                    Serial.println("Blue product routed successfully");
+                
+                    stopSorterConveyor();
+                    changeState(SystemState::START_CONVEYOR);
+                }
+            } else if (cameraColor == DetectedColor::RED) {
+                startSorterConveyor(
+                    Config::SORTER_CONVEYOR_SPEED,
+                    MotorDirection::REVERSE
+                );
+            
+                if (isSensorActive(Config::RED_OUTPUT_SENSOR_PIN)) {
+                    Serial.println("Red product routed successfully");
+                
+                    stopSorterConveyor();
+                    changeState(SystemState::START_CONVEYOR);
+                }
+            } else {
+                changeState(SystemState::FINAL_REJECT);
+            }
             break;
 
-        case SystemState::QUALITY_REJECTED:
+        case SystemState::INITIAL_REJECT:
+            if (
+                isSensorActive(Config::REJECT_SENSOR_1_PIN) ||
+                isSensorActive(Config::REJECT_SENSOR_2_PIN)
+            ) {
+                Serial.println("Primary reject completed");
             
+                closePrimaryRejectGate();
+                stopMainConveyor();
+            
+                changeState(SystemState::START_CONVEYOR);
+            }
+            break;
+
+        case SystemState::FINAL_REJECT:
+            openFinalRejectGate();
+
+            startSorterConveyor(
+                Config::SORTER_CONVEYOR_SPEED,
+                MotorDirection::REVERSE
+            );
+        
+            if (
+                isSensorActive(Config::REJECT_SENSOR_1_PIN) ||
+                isSensorActive(Config::REJECT_SENSOR_2_PIN)
+            ) {
+                Serial.println("Final reject completed");
+            
+                stopSorterConveyor();
+                closeFinalRejectGate();
+            
+                changeState(SystemState::START_CONVEYOR);
+            }
             break;
     }
 }
@@ -201,6 +345,15 @@ void runStateMachine(SerialCommand command) {
 void changeState(SystemState newState) {
     currentState = newState;
     stateStartTime = millis();
+
+    if (newState == SystemState::FILL_BLUE || newState == SystemState::FILL_RED) {
+        fillingStarted = false;
+    }
+
+    if (newState == SystemState::QUALITY_CONTROL) {
+        controlRequestSent = false;
+        cameraColor = DetectedColor::NONE;
+    }
 }
 
 bool isSensorActive(uint8_t pin) {

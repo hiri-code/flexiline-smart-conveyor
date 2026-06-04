@@ -62,7 +62,8 @@ namespace Config {
 
     constexpr uint8_t MAIN_GATE_SERVO_PIN = 2;
     constexpr uint8_t FILLING_GATE_SERVO_PIN = 3;
-    constexpr uint8_t REJECT_GATE_SERVO_PIN = 4;
+    constexpr uint8_t PRIMARY_REJECT_GATE_SERVO_PIN = 4;
+    constexpr uint8_t FINAL_REJECT_GATE_SERVO_PIN = 5;
 
     // >>>>>>>>>>>>>>>>>>>> Servo position <<<<<<<<<<<<<<<<<<<<
 
@@ -75,8 +76,12 @@ namespace Config {
     constexpr uint8_t FILLING_GATE_OPEN_ANGLE = 90;
 
     // Reject gate servo
-    constexpr uint8_t REJECT_GATE_CLOSED_ANGLE = 180;
-    constexpr uint8_t REJECT_GATE_OPEN_ANGLE = 105;
+    constexpr uint8_t PRIMARY_REJECT_GATE_CLOSED_ANGLE = 180;
+    constexpr uint8_t PRIMARY_REJECT_GATE_OPEN_ANGLE = 105;
+
+    // Final reject gate servo
+    constexpr uint8_t FINAL_REJECT_GATE_CLOSED_ANGLE = 180;
+    constexpr uint8_t FINAL_REJECT_GATE_OPEN_ANGLE = 105;
 
 
     // >>>>>>>>>>>>>>>>>>>> Color sensor pins <<<<<<<<<<<<<<<<<<<<
