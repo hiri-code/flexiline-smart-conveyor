@@ -10,9 +10,11 @@ Originally developed as a university project, this repository contains a refacto
 
 ## Status
 
-**Functional prototype — under active refactor**
+**Functional prototype — refactored software and firmware**
 
-The original system was implemented and tested as a university project. This version is being refactored to improve the Python application, Arduino firmware structure, UI design, serial communication and documentation.
+The original system was implemented and tested as a university mechatronics project. This repository contains a refactored version with a modular Python desktop application, a redesigned PySide6 dashboard, a PlatformIO-based Arduino firmware structure and an updated serial communication protocol.
+
+The Python dashboard and serial communication flow have been tested using virtual serial ports. The original physical prototype was functional. The refactored version preserves the original production flow while improving maintainability, project structure and documentation.
 
 ## Overview
 
@@ -64,6 +66,8 @@ FlexiLine follows an automated production sequence controlled by Arduino and sup
 
 
 ## Process Flow
+
+The following diagram summarizes the complete production sequence, from bottle detection to filling, OpenCV inspection and final sorting.
 
 ![FlexiLine process flow](docs/diagrams/process_flow.png)
 
@@ -154,7 +158,7 @@ The original physical prototype was built using the following main components:
 | Gear motors                         |        2 | Conveyor movement                      |
 | 1/2" solenoid valves                |        2 | Liquid flow control                    |
 | Arduino Mega                        |        1 | Embedded control unit                  |
-| Servomotors                         |        2 | Mechanical routing and gate control    |
+| Servomotors                         |        4 | Mechanical routing and gate control    |
 | BTS7960 H-Bridge drivers            |        2 | Motor direction and power control      |
 | Steel square tube support structure |        2 | Mechanical frame                       |
 | Tinned cable                        |        2 | Electrical wiring                      |
