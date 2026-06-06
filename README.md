@@ -62,7 +62,10 @@ FlexiLine follows an automated production sequence controlled by Arduino and sup
 11. Arduino routes the bottle to the corresponding left or right distribution path.
 12. The final product is collected according to its color/product category.
 
-*Process flow diagram coming soon.*
+
+## Process Flow
+
+![FlexiLine process flow](docs/diagrams/process_flow.png)
 
 ## System Architecture
 
