@@ -6,7 +6,7 @@ Originally developed as a university project, this repository contains a refacto
 
 ## Dashboard Preview
 
-![FlexiLine process flow](docs/screenshots/dashboard_running.png)
+![Dashboard Preview](docs/screenshots/dashboard_running.png)
 
 ## Status
 
@@ -165,6 +165,20 @@ The original physical prototype was built using the following main components:
 | Stainless steel sheet, gauge 18     |        2 | Structural and mechanical components   |
 | Conveyor belts                      |        3 | Product transport and sorting          |
 
+## Mock Arduino Simulator
+
+A mock Arduino script is included to test the dashboard serial communication flow without the physical hardware.
+
+The simulator receives `START` and `STOP` commands from the dashboard, sends `CONTROL` requests and waits for `B`, `R` or `N` as the computer vision result.
+
+To run it:
+
+```bash
+python tools/mock_arduino.py
+```
+
+A virtual serial port pair is required. On Windows, this project was tested using Virtual Serial Port Kit. On Linux, a similar setup can be created using `socat`.
+
 ## Installation
 
 ### Prerequisites
@@ -226,18 +240,6 @@ python -m src.main
 6. When final inspection is required, Arduino sends a `CONTROL` request.
 7. Python performs camera-based color inspection and sends the result back to Arduino.
 8. Arduino routes the bottle according to the inspection result.
-
-## Roadmap
-
-* [x] Create Python application entry point.
-* [x] Refactor camera processing module.
-* [x] Refactor Arduino serial controller.
-* [x] Create PySide6 dashboard interface.
-* [x] Add external QSS styling.
-* [x] Integrate dashboard with core components.
-* [x] Add modular Arduino firmware.
-* [ ] Add dashboard screenshots.
-* [ ] Complete final project documentation.
 
 ## Background
 
