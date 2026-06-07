@@ -125,15 +125,24 @@ class ProductionChart(FigureCanvas):
     def _update_plot(self) -> None:
         self._blue_line.set_data(self._time_data, self._blue_history)
         self._red_line.set_data(self._time_data, self._red_history)
-
+    
         if not self._time_data:
             self._ax.set_xlim(0, 10)
             self._ax.set_ylim(0, 10)
         else:
-            self._ax.relim()
-            self._ax.autoscale_view()
-            self._ax.margins(x=0.05, y=0.15)
-
+            x_max = max(self._time_data) + 1
+            x_min = max(0, x_max - ChartConfig.MAX_HISTORY_POINTS)
+    
+            max_count = max(
+                max(self._blue_history, default=0),
+                max(self._red_history, default=0)
+            )
+    
+            y_max = max(10, max_count + 2)
+    
+            self._ax.set_xlim(x_min, x_max)
+            self._ax.set_ylim(0, y_max)
+    
         self.draw_idle()
 
     def _setup_chart(self) -> None:

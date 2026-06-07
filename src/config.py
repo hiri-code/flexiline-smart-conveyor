@@ -61,10 +61,10 @@ class ChartConfig:
 class StatusMessages:
     """Status messages for UI display."""
     # Serial connection messages
-    SERIAL_CONNECTING: str = "Connecting {}..."
     SERIAL_CONNECTED: str = "Connected"
-    SERIAL_DISCONNECTING: str = "Disconnecting {}..."
+    SERIAL_CONNECTING: str = "Connecting..."
     SERIAL_DISCONNECTED: str = "Disconnected"
+    SERIAL_DISCONNECTING: str = "Disconnecting"
     SERIAL_ERROR: str = "Serial error: {}"
     SERIAL_CLOSED: str = "Serial connection closed"
     SERIAL_FAILED: str = "Connection failed"
@@ -72,8 +72,8 @@ class StatusMessages:
     SERIAL_UNEXPECTED_ERROR: str = "Unexpected serial error: {}"
 
     # Camera messages
-    CAMERA_ON: str = "Camera ON"
-    CAMERA_OFF: str = "Camera OFF"
+    CAMERA_ON: str = "Camera On"
+    CAMERA_OFF: str = "Camera Off"
     CAMERA_INITIALIZING: str = "Initializing camera..."
     CAMERA_ERROR_OPEN: str = "Error opening camera"
     CAMERA_ERROR_CAPTURE: str = "Error capturing frame from camera"
@@ -87,11 +87,18 @@ class StatusMessages:
 
     # System status messages
     SYSTEM_READY: str = "System ready"
-    SYSTEM_VERSION: str = "FlexiLine v1.4.3"
+    SYSTEM_VERSION: str = "FlexiLine v1.5.2"
     SYSTEM_STARTED: str = "System started"
     SYSTEM_STOPPED: str = "System stopped"
     SYSTEM_NO_ARDUINO: str = "No Arduino connected"
     SYSTEM_CHART_RESET: str = "Production chart reset"
+
+    # System health messages
+    SYSTEM_RUNNING: str = "System running"
+    SYSTEM_INITIALIZING: str = "Initializing system"
+    SYSTEM_CAMERA_ERROR: str = "Camera error"
+    SYSTEM_CONNECTING: str = "Connecting to Arduino..."
+    SYSTEM_DISCONNECTING: str = "Disconnecting Arduino..."
 
     # Close confirmation messages
     CLOSE_CONFIRMATION_TITLE: str = "Confirm Exit"

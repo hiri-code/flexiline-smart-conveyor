@@ -184,7 +184,9 @@ class MainWindow(QMainWindow):
     def _on_arduino_connection_failed(self, error: str) -> None:
         """Show connection failure in UI."""
         self._set_connection_state(StatusMessages.SERIAL_FAILED, "error")
-        self._show_status_message(error)
+        self.ui.connection_port_label.setText("Port: --")
+        self._set_system_health(StatusMessages.SERIAL_FAILED, "error")
+        self._show_status_message(error, temporary=False)
 
     def _on_arduino_error_occurred(self, error: str) -> None:
         """Show Arduino communication error in UI"""
@@ -197,6 +199,11 @@ class MainWindow(QMainWindow):
         """Update camera status label when capture begins."""
         self.ui.camera_status_label.setText(StatusMessages.CAMERA_ON)
         self.ui.retry_camera_button.setVisible(False)
+
+        if self.arduino.is_connected:
+            self._set_system_health(StatusMessages.SYSTEM_RUNNING, "ok")
+            self._show_status_message(StatusMessages.SYSTEM_STARTED)
+
         self._show_status_message(StatusMessages.CAMERA_ON)
     
     def _on_camera_stopped(self) -> None:
@@ -206,9 +213,11 @@ class MainWindow(QMainWindow):
     def _on_camera_error(self, error: str) -> None:
         """Show camera error and reveal the retry button."""
         message = StatusMessages.CAMERA_ERROR_RETRY.format(error)
+
         self.ui.camera_status_label.setText(message)
         self.ui.retry_camera_button.setVisible(True)
-        self._set_system_health(message, "error")
+
+        self._set_system_health(StatusMessages.SYSTEM_CAMERA_ERROR, "error")
         self._show_status_message(message, temporary=False)
 
     def _on_camera_frame_ready(self, image) -> None:
@@ -256,24 +265,42 @@ class MainWindow(QMainWindow):
         """Send start command to Arduino and update button states."""
         if not self.arduino.is_connected:
             self._set_system_health(StatusMessages.SYSTEM_NO_ARDUINO, "error")
-            self._show_status_message(StatusMessages.SYSTEM_NO_ARDUINO)
+            self._show_status_message(StatusMessages.SYSTEM_NO_ARDUINO, temporary=False)
             return
-        
+
+        self.ui.camera_status_label.setText(StatusMessages.CAMERA_INITIALIZING)
+        self._set_system_health(StatusMessages.SYSTEM_INITIALIZING, "warning")
+        self._show_status_message(StatusMessages.SYSTEM_INITIALIZING, temporary=False)
+
         self.camera.start()
         self.arduino.send_command(SerialCommands.START)
+
         self.ui.start_button.setEnabled(False)
-        QTimer.singleShot(UIConfig.BUTTON_TOGGLE_DELAY_MS, lambda: self.ui.stop_button.setEnabled(True))
-        self._show_status_message(StatusMessages.SYSTEM_STARTED)
+        self.ui.stop_button.setEnabled(False)
+
+        QTimer.singleShot(
+            UIConfig.BUTTON_TOGGLE_DELAY_MS,
+            self._enable_stop_if_connected
+        )
 
     def _on_stop_clicked(self) -> None:
         """Send stop command to Arduino and update button states."""
         if not self.arduino.is_connected:
+            self._set_system_health(StatusMessages.SYSTEM_NO_ARDUINO, "error")
+            self._show_status_message(StatusMessages.SYSTEM_NO_ARDUINO, temporary=False)
             return
-        
+
         self.arduino.send_command(SerialCommands.STOP)
         self.camera.stop()
+
         self.ui.stop_button.setEnabled(False)
-        QTimer.singleShot(UIConfig.BUTTON_TOGGLE_DELAY_MS, lambda: self.ui.start_button.setEnabled(True))
+        self.ui.start_button.setEnabled(False)
+
+        QTimer.singleShot(
+            UIConfig.BUTTON_TOGGLE_DELAY_MS,
+            self._enable_start_if_connected
+        )
+
         self._set_system_health(StatusMessages.SYSTEM_STOPPED, "warning")
         self._show_status_message(StatusMessages.SYSTEM_STOPPED)
 
@@ -286,8 +313,35 @@ class MainWindow(QMainWindow):
         """Attempt to restart the camera after an error."""
         self.ui.retry_camera_button.setVisible(False)
         self.ui.camera_status_label.setText(StatusMessages.CAMERA_RECONNECTING)
+
+        self._set_system_health(StatusMessages.CAMERA_RECONNECTING, "warning")
         self._show_status_message(StatusMessages.CAMERA_RECONNECTING, temporary=False)
+
         self.camera.start()
+
+    def _on_port_selected(self, port: str) -> None:
+        """Handle port selection from the dynamic ports menu."""
+        if self.arduino.is_connected and port == self.arduino.current_port:
+            self._set_connection_state(
+                StatusMessages.SERIAL_DISCONNECTING.format(port),
+                "warning"
+            )
+            self._show_status_message(
+                StatusMessages.SERIAL_DISCONNECTING.format(port),
+                temporary=False
+            )
+        else:
+            self._set_connection_state(
+                StatusMessages.SERIAL_CONNECTING.format(port),
+                "warning"
+            )
+            self.ui.connection_port_label.setText(f"Port: {port}")
+            self._show_status_message(
+                StatusMessages.SERIAL_CONNECTING.format(port),
+                temporary=False
+            )
+
+        self.arduino.toggle_connection(port)
     
 
     # >>>>>>>>>>>>>>>>>>>> Port menu function <<<<<<<<<<<<<<<<<<<<
@@ -301,12 +355,14 @@ class MainWindow(QMainWindow):
             action.setEnabled(False)
             self._ports_submenu.addAction(action)
             return
-        
+
         for port in ports:
             action = QAction(port, self)
             action.setCheckable(True)
             action.setChecked(port == self.arduino.current_port)
-            action.triggered.connect(lambda checked, p=port: self.arduino.toggle_connection(p))
+            action.triggered.connect(
+                lambda checked, p=port: self._on_port_selected(p)
+            )
             self._ports_submenu.addAction(action)
 
 
@@ -344,8 +400,16 @@ class MainWindow(QMainWindow):
         """Update the status bar clock with current local time."""
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
         self.datetime_status_label.setText(now)
-    
 
+    def _enable_stop_if_connected(self) -> None:
+        if self.arduino.is_connected:
+            self.ui.stop_button.setEnabled(True)
+
+
+    def _enable_start_if_connected(self) -> None:
+        if self.arduino.is_connected:
+            self.ui.start_button.setEnabled(True)
+    
 
     # >>>>>>>>>>>>>>>>>>>> Close events <<<<<<<<<<<<<<<<<<<<
     
