@@ -6,7 +6,7 @@ Originally developed as a university project, this repository contains a refacto
 
 ## Dashboard Preview
 
-*Dashboard screenshot coming soon.*
+![FlexiLine process flow](docs/screenshots/dashboard_running.png)
 
 ## Status
 
